@@ -28,5 +28,13 @@ def return_books():
 @app.post('/books/new-book')
 def return_books(book_request: BookRequest):
     new_book = Book(**book_request.model_dump())
-    BOOKS.append(new_book)
+    BOOKS.append(complete_book(new_book))
     return BOOKS
+
+def complete_book(book : Book):
+    book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 10
+    return book
+
+@app.get('/abc')
+def abc_test():
+    return 'abc'
