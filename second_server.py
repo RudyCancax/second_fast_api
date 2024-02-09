@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Body
-from Book import Book
+from Book import Book, BookRequest
 
 app = FastAPI()
 
@@ -26,5 +26,7 @@ def return_books():
     return BOOKS
 
 @app.post('/books/new-book')
-def return_books(new_book = Body()):
-    return BOOKS.append(new_book)
+def return_books(book_request: BookRequest):
+    new_book = Book(**book_request.model_dump())
+    BOOKS.append(new_book)
+    return BOOKS
