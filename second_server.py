@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Query
 from Book import Book, BookRequest
 
 app = FastAPI()
@@ -26,7 +26,7 @@ def return_books():
     return BOOKS
 
 @app.get('/books/get-by-year/')
-def gets_book_by_published_year(published_year : int):
+def gets_book_by_published_year(published_year : int = Query(gt=1999, lt=2024)):
     books = []
     for book in BOOKS:
         if book.published_date == published_year:
