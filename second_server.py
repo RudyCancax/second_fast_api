@@ -32,7 +32,7 @@ def return_books(book_request: BookRequest):
     return BOOKS
 
 @app.post('/books/find-by-id/{book_id}')
-def return_books(book_id:int):
+def find_book_by_id(book_id:int):
     for book in BOOKS:
         if book.id == book_id:
             return book;
