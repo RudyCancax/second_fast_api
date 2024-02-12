@@ -40,7 +40,7 @@ def find_book_by_id(book_id:int):
         return f"Book with id: {book_id}, NOT FOUNDED!"
     
 @app.post('/books/books-by-rating/')
-def find_book_by_id(rate:int):
+def find_book_by_rate(rate:int):
     books = []
     for book in BOOKS:
         if book.rating == rate:
@@ -49,6 +49,15 @@ def find_book_by_id(rate:int):
         return books
     else:
         return f"Books with rate: {rate}, NOT FOUNDED!"
+    
+@app.put('/books/update-book/')
+def update_book_by_id_using_put(id:int):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].id == id:
+            BOOKS[i].description = 'Labore labore sit quis laboris adipisicing ex proident veniam enim duis amet.'
+            return BOOKS[i]
+    else:
+        return f"Books with id: {id}, NOT FOUNDED!"
         
 
 def complete_book(book : Book):
