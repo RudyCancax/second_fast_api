@@ -31,10 +31,15 @@ def return_books(book_request: BookRequest):
     BOOKS.append(complete_book(new_book))
     return BOOKS
 
+@app.post('/books/find-by-id/{book_id}')
+def return_books(book_id:int):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book;
+    else:
+        return f"Book with id: {book_id}, NOT FOUNDED!"
+        
+
 def complete_book(book : Book):
     book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 10
     return book
-
-@app.get('/abc')
-def abc_test():
-    return 'abc'
