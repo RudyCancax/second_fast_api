@@ -58,6 +58,18 @@ def update_book_by_id_using_put(id:int):
             return BOOKS[i]
     else:
         return f"Books with id: {id}, NOT FOUNDED!"
+    
+@app.delete('/books/delete-book/')
+def delete_book_by_id(id:int):
+    bookId = None
+    for i in range(len(BOOKS)):
+        if BOOKS[i].id == id:
+            bookId = i
+    if bookId:
+        BOOKS.pop(i)
+        return BOOKS;
+    else:
+        return f"Books with id: {id}, NOT FOUNDED!"
         
 
 def complete_book(book : Book):
