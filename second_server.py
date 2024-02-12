@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Path, Query, HTTPException
 from Book import Book, BookRequest
+from starlette import status
 
 app = FastAPI()
 
@@ -17,15 +18,15 @@ BOOKS = [
 ]
 
 
-@app.get('/')
+@app.get('/', status_code=status.HTTP_200_OK)
 def empty_state_api_2():
     return "Hello API 2"
 
-@app.get('/books')
+@app.get('/books', status_code=status.HTTP_200_OK)
 def return_books():
     return BOOKS
 
-@app.get('/books/get-by-year/')
+@app.get('/books/get-by-year/', status_code=status.HTTP_200_OK)
 def gets_book_by_published_year(published_year : int = Query(gt=1999, lt=2024)):
     books = []
     for book in BOOKS:
@@ -37,7 +38,7 @@ def gets_book_by_published_year(published_year : int = Query(gt=1999, lt=2024)):
     else:
         raise HTTPException(status_code=404, detail=f"Book with published year: {published_year}, NOT FOUND!")
     
-@app.get('/books/find-by-id/{book_id}')
+@app.get('/books/find-by-id/{book_id}', status_code=status.HTTP_200_OK)
 def find_book_by_id(book_id : int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
@@ -45,7 +46,7 @@ def find_book_by_id(book_id : int = Path(gt=0)):
     else:
         raise HTTPException(status_code=404, detail=f"Book with id: {book_id}, NOT FOUND!")
     
-@app.post('/books/new-book')
+@app.post('/books/new-book', status_code=status.HTTP_201_CREATED)
 def return_books(book_request: BookRequest):
     new_book = Book(**book_request.model_dump())
     BOOKS.append(complete_book(new_book))
@@ -53,7 +54,7 @@ def return_books(book_request: BookRequest):
 
     
     
-@app.post('/books/books-by-rating/')
+@app.post('/books/books-by-rating/', status_code=status.HTTP_302_FOUND)
 def find_book_by_rate(rate : int):
     books = []
     for book in BOOKS:
@@ -64,7 +65,7 @@ def find_book_by_rate(rate : int):
     else:
         raise HTTPException(status_code=404, detail=f"Books with rate: {rate}, NOT FOUND!")
     
-@app.put('/books/update-book/')
+@app.put('/books/update-book/', status_code=status.HTTP_200_OK)
 def update_book_by_id_using_put(id : int):
     for i in range(len(BOOKS)):
         if BOOKS[i].id == id:
@@ -73,7 +74,7 @@ def update_book_by_id_using_put(id : int):
     else:
         raise HTTPException(status_code=404, detail=f"Books with id: {id}, NOT FOUND!")
     
-@app.delete('/books/delete-book/')
+@app.delete('/books/delete-book/', status_code=status.HTTP_200_OK)
 def delete_book_by_id(id : int):
     bookId = None
     for i in range(len(BOOKS)):
