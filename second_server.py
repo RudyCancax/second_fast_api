@@ -38,6 +38,17 @@ def find_book_by_id(book_id:int):
             return book;
     else:
         return f"Book with id: {book_id}, NOT FOUNDED!"
+    
+@app.post('/books/books-by-rating/{rate}')
+def find_book_by_id(rate:int):
+    books = []
+    for book in BOOKS:
+        if book.rating == rate:
+            books.append(book)
+    if books:
+        return books
+    else:
+        return f"Books with rate: {rate}, NOT FOUNDED!"
         
 
 def complete_book(book : Book):
