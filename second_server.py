@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Path
 from Book import Book, BookRequest
 
 app = FastAPI()
@@ -25,22 +25,8 @@ def empty_state_api_2():
 def return_books():
     return BOOKS
 
-@app.post('/books/new-book')
-def return_books(book_request: BookRequest):
-    new_book = Book(**book_request.model_dump())
-    BOOKS.append(complete_book(new_book))
-    return BOOKS
-
-@app.post('/books/find-by-id/{book_id}')
-def find_book_by_id(book_id:int):
-    for book in BOOKS:
-        if book.id == book_id:
-            return book;
-    else:
-        return f"Book with id: {book_id}, NOT FOUNDED!"
-    
 @app.get('/books/get-by-year/')
-def gets_book_by_published_year(published_year:int):
+def gets_book_by_published_year(published_year : int):
     books = []
     for book in BOOKS:
         if book.published_date == published_year:
@@ -51,8 +37,24 @@ def gets_book_by_published_year(published_year:int):
     else:
         return f"Book with published year: {published_year}, NOT FOUNDED!"
     
+@app.get('/books/find-by-id/{book_id}')
+def find_book_by_id(book_id : int = Path(gt=0)):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+    else:
+        return f"Book with id: {book_id}, NOT FOUNDED!"
+    
+@app.post('/books/new-book')
+def return_books(book_request: BookRequest):
+    new_book = Book(**book_request.model_dump())
+    BOOKS.append(complete_book(new_book))
+    return BOOKS
+
+    
+    
 @app.post('/books/books-by-rating/')
-def find_book_by_rate(rate:int):
+def find_book_by_rate(rate : int):
     books = []
     for book in BOOKS:
         if book.rating == rate:
@@ -63,7 +65,7 @@ def find_book_by_rate(rate:int):
         return f"Books with rate: {rate}, NOT FOUNDED!"
     
 @app.put('/books/update-book/')
-def update_book_by_id_using_put(id:int):
+def update_book_by_id_using_put(id : int):
     for i in range(len(BOOKS)):
         if BOOKS[i].id == id:
             BOOKS[i].description = 'Labore labore sit quis laboris adipisicing ex proident veniam enim duis amet.'
@@ -72,7 +74,7 @@ def update_book_by_id_using_put(id:int):
         return f"Books with id: {id}, NOT FOUNDED!"
     
 @app.delete('/books/delete-book/')
-def delete_book_by_id(id:int):
+def delete_book_by_id(id : int):
     bookId = None
     for i in range(len(BOOKS)):
         if BOOKS[i].id == id:
