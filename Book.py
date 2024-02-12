@@ -20,3 +20,13 @@ class BookRequest(BaseModel):
     author: str
     description:str
     rating: int
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "title": "Any book title",
+                "auther": "Books's author",
+                "description": "A brieve description of book",
+                "rating": 5
+            }
+        }
