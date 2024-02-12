@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path, Query
+from fastapi import FastAPI, Path, Query, HTTPException
 from Book import Book, BookRequest
 
 app = FastAPI()
@@ -35,7 +35,7 @@ def gets_book_by_published_year(published_year : int = Query(gt=1999, lt=2024)):
     if books:
         return books;
     else:
-        return f"Book with published year: {published_year}, NOT FOUNDED!"
+        raise HTTPException(status_code=404, detail=f"Book with published year: {published_year}, NOT FOUND!")
     
 @app.get('/books/find-by-id/{book_id}')
 def find_book_by_id(book_id : int = Path(gt=0)):
@@ -43,7 +43,7 @@ def find_book_by_id(book_id : int = Path(gt=0)):
         if book.id == book_id:
             return book
     else:
-        return f"Book with id: {book_id}, NOT FOUNDED!"
+        raise HTTPException(status_code=404, detail=f"Book with id: {book_id}, NOT FOUND!")
     
 @app.post('/books/new-book')
 def return_books(book_request: BookRequest):
@@ -62,7 +62,7 @@ def find_book_by_rate(rate : int):
     if books:
         return books
     else:
-        return f"Books with rate: {rate}, NOT FOUNDED!"
+        raise HTTPException(status_code=404, detail=f"Books with rate: {rate}, NOT FOUND!")
     
 @app.put('/books/update-book/')
 def update_book_by_id_using_put(id : int):
@@ -71,7 +71,7 @@ def update_book_by_id_using_put(id : int):
             BOOKS[i].description = 'Labore labore sit quis laboris adipisicing ex proident veniam enim duis amet.'
             return BOOKS[i]
     else:
-        return f"Books with id: {id}, NOT FOUNDED!"
+        raise HTTPException(status_code=404, detail=f"Books with id: {id}, NOT FOUND!")
     
 @app.delete('/books/delete-book/')
 def delete_book_by_id(id : int):
@@ -83,7 +83,7 @@ def delete_book_by_id(id : int):
         BOOKS.pop(i)
         return BOOKS;
     else:
-        return f"Books with id: {id}, NOT FOUNDED!"
+        raise HTTPException(status_code=404, detail=f"Books with id: {id}, NOT FOUND!")
         
 
 def complete_book(book : Book):
