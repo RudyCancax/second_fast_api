@@ -39,7 +39,7 @@ def find_book_by_id(book_id:int):
     else:
         return f"Book with id: {book_id}, NOT FOUNDED!"
     
-@app.post('/books/books-by-rating/{rate}')
+@app.post('/books/books-by-rating/')
 def find_book_by_id(rate:int):
     books = []
     for book in BOOKS:
