@@ -46,15 +46,7 @@ def find_book_by_id(book_id : int = Path(gt=0)):
     else:
         raise HTTPException(status_code=404, detail=f"Book with id: {book_id}, NOT FOUND!")
     
-@app.post('/books/new-book', status_code=status.HTTP_201_CREATED)
-def return_books(book_request: BookRequest):
-    new_book = Book(**book_request.model_dump())
-    BOOKS.append(complete_book(new_book))
-    return BOOKS
-
-    
-    
-@app.post('/books/books-by-rating/', status_code=status.HTTP_302_FOUND)
+@app.get('/books/books-by-rating/', status_code=status.HTTP_204_NO_CONTENT)
 def find_book_by_rate(rate : int):
     books = []
     for book in BOOKS:
@@ -64,6 +56,14 @@ def find_book_by_rate(rate : int):
         return books
     else:
         raise HTTPException(status_code=404, detail=f"Books with rate: {rate}, NOT FOUND!")
+    
+@app.post('/books/new-book', status_code=status.HTTP_201_CREATED)
+def return_books(book_request: BookRequest):
+    new_book = Book(**book_request.model_dump())
+    BOOKS.append(complete_book(new_book))
+    return BOOKS
+
+    
     
 @app.put('/books/update-book/', status_code=status.HTTP_200_OK)
 def update_book_by_id_using_put(id : int):
